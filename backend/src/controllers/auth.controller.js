@@ -5,7 +5,7 @@ const foodPartnerModel = require("../models/foodPartner.model");
 
 //* Register User
 const registerUser = async (req, res) => {
-  const { fullName, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   const isUserAlreadyExists = await userModel.findOne({
     email,
@@ -20,7 +20,8 @@ const registerUser = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await userModel.create({
-    fullName,
+    firstName,
+    lastName,
     email,
     password: hashedPassword,
   });
@@ -39,7 +40,8 @@ const registerUser = async (req, res) => {
     user: {
       _id: user._id,
       email: user.email,
-      fullName: user.fullName,
+      firstName: user.firstName,
+      lastName: user.lastName,
     },
   });
 };
@@ -94,7 +96,7 @@ const logoutUser = (req, res) => {
 
 //* FoodPartner Register
 const registerFoodPartner = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, contactName, phone, address, email, password } = req.body;
 
   const isAccountAlreadyExists = await foodPartnerModel.findOne({ email });
 
@@ -108,6 +110,9 @@ const registerFoodPartner = async (req, res) => {
 
   const foodPartner = await foodPartnerModel.create({
     name,
+    contactName,
+    phone,
+    address,
     email,
     password: hashedPassword,
   });
@@ -126,6 +131,9 @@ const registerFoodPartner = async (req, res) => {
     foodPartner: {
       _id: foodPartner._id,
       name: foodPartner.name,
+      contactName: foodPartner.contactName,
+      phone: foodPartner.phone,
+      address: foodPartner.address,
       email: foodPartner.email,
     },
   });

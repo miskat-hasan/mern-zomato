@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+body {
+  background-color: black;
+  color: whitesmoke;
+}
+
+/* Small utility to clamp text to 2 lines when Tailwind's line-clamp plugin isn't configured */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

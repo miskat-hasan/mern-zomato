@@ -1,4 +1,5 @@
 const foodModel = require("../models/food.model");
+const LikeModel = require("../models/likes.model");
 const { uploadFile } = require("../services/storage.service");
 const { v4: uuid } = require("uuid");
 
@@ -29,7 +30,51 @@ const getFoodItems = async (req, res) => {
   });
 };
 
+//* Food Like Controller
+const likeFood = async (req, res) => {
+  const { foodId } = req.body;
+  const user = req.user;
+
+  if (!foodId) {
+    return res.status(404).json({
+      success: false,
+      message: "Food ID is required.",
+    });
+  }
+
+  const isAlreadyLiked = await LikeModel.findOne({
+    user: user._id,
+    food: foodId,
+  });
+
+  if (isAlreadyLiked) {
+    await LikeModel.findOneAndDelete({
+      user: user._id,
+      food: foodId,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Food disliked successfully.",
+    });
+  }
+
+  const like = await LikeModel.create({
+    user: user._id,
+    food: foodId,
+  });
+  
+  res.status(201).json({
+    success: true,
+    message: "Food Liked Successfully.",
+    like,
+  });
+};
+
+const saveFood = async (req, res) => {};
 module.exports = {
   createFood,
   getFoodItems,
+  likeFood,
+  saveFood,
 };
